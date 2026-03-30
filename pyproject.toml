@@ -1,0 +1,13 @@
+[project]
+name = "intrusion-openenv"
+version = "0.1.0"
+description = "Intrusion Detection OpenEnv"
+authors = [{ name = "Sandesh" }]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic"
+]
+
+[tool.openenv]
+entry_point = "app:app"
