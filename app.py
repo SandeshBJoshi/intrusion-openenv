@@ -1,11 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from env import IntrusionEnv
 import random
 
-app = FastAPI()
+# try importing env safely
+try:
+    from env import IntrusionEnv
+    env = IntrusionEnv()
+except Exception as e:
+    print("ENV INIT ERROR:", e)
+    env = None
 
-env = IntrusionEnv()
+app = FastAPI()
 
 # store last action for grading
 last_action = {"action": None}
@@ -24,17 +29,22 @@ def home():
 # ---------------- RESET ----------------
 @app.get("/reset")
 def reset(level: str = None):
+    if env is None:
+        return {"error": "Environment not initialized"}
+
     state = env.reset(level)
-    last_action["action"] = None  # reset last action
-    return {
-        "observation": state
-    }
+    last_action["action"] = None
+
+    return {"observation": state}
 
 
 # ---------------- STEP ----------------
 @app.post("/step")
 def step(request: ActionRequest):
-    last_action["action"] = request.action  # store action
+    if env is None:
+        return {"error": "Environment not initialized"}
+
+    last_action["action"] = request.action
 
     state, reward, done, info = env.step(request.action)
 
@@ -49,9 +59,10 @@ def step(request: ActionRequest):
 # ---------------- STATE ----------------
 @app.get("/state")
 def get_state():
-    return {
-        "state": env.get_state()
-    }
+    if env is None:
+        return {"error": "Environment not initialized"}
+
+    return {"state": env.get_state()}
 
 
 # ---------------- TASKS ----------------
@@ -78,9 +89,12 @@ def get_tasks():
     }
 
 
-# ---------------- GRADER (DYNAMIC) ----------------
+# ---------------- GRADER ----------------
 @app.get("/grader")
 def grader():
+    if env is None:
+        return {"error": "Environment not initialized"}
+
     state = env.get_state()
 
     if not state:
@@ -92,7 +106,7 @@ def grader():
     correct = state["label"]
     action = last_action["action"]
 
-    # dynamic scoring logic
+    # dynamic scoring
     if action == correct:
         score = 1.0
     elif action.lower() in correct.lower():
@@ -110,6 +124,9 @@ def grader():
 # ---------------- BASELINE AGENT ----------------
 @app.get("/baseline")
 def baseline():
+    if env is None:
+        return {"error": "Environment not initialized"}
+
     results = []
 
     for level in ["easy", "medium", "hard"]:
@@ -128,9 +145,7 @@ def baseline():
             "level": level,
             "chosen_action": action,
             "reward": reward,
-            "correct": info["correct_label"]
+            "correct": info.get("correct_label", "Unknown")
         })
 
-    return {
-        "baseline_results": results
-    }
+    return {"baseline_results": results}
