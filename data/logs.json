@@ -1,0 +1,49 @@
+[
+  {
+    "level": "easy",
+    "traffic": "Normal browsing with low request rate",
+    "label": "Normal"
+  },
+  {
+    "level": "easy",
+    "traffic": "User logs in successfully once",
+    "label": "Normal"
+  },
+  {
+    "level": "easy",
+    "traffic": "5 failed login attempts from same IP",
+    "label": "BruteForce"
+  },
+
+  {
+    "level": "medium",
+    "traffic": "Multiple failed logins followed by success",
+    "label": "BruteForce"
+  },
+  {
+    "level": "medium",
+    "traffic": "High traffic from single IP (500 req/sec)",
+    "label": "DDoS"
+  },
+  {
+    "level": "medium",
+    "traffic": "Accessing multiple ports sequentially",
+    "label": "PortScan"
+  },
+
+  {
+    "level": "hard",
+    "traffic": "Login success at 2AM + unusual data download",
+    "label": "DataExfiltration"
+  },
+  {
+    "level": "hard",
+    "traffic": "Sudden spike to 2000 req/sec from bot-like pattern",
+    "label": "DDoS"
+  },
+  {
+    "level": "hard",
+    "traffic": "Scanning ports + repeated login attempts",
+    "label": "MultiAttack"
+  }
+]
