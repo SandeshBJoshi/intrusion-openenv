@@ -1,3 +1,14 @@
+---
+title: Intrusion OpenEnv
+emoji: 🛡️
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_file: app.py
+app_port: 7860
+pinned: false
+---
+
 # Intrusion Detection OpenEnv
 
 ## Overview
@@ -42,15 +53,3 @@ Possible actions:
 ```bash
 docker build -t intrusion-env .
 docker run -p 8000:8000 intrusion-env
-```
-## Access API
-Visit:
-http://localhost:8000/docs
-
-## Use Case
-This environment simulates a Security Operations Center (SOC) workflow where an agent analyzes network logs and classifies threats.
-
-## Future Improvements
-- Integration with real datasets  
-- Multi-step attack simulation  
-- Reinforcement learning agents  
