@@ -3,7 +3,7 @@ import random
 
 class IntrusionEnv:
     def __init__(self):
-        with open("data/logs.json", "r") as f:
+        with open("logs.json", "r") as f:
             self.data = json.load(f)
         
         self.current_index = 0
