@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
+from fastapi import Body
 import random
 
 # try importing env safely
@@ -31,9 +32,10 @@ def home():
 
 
 # ---------------- RESET ----------------
+
 @app.get("/reset")
-@app.post("/reset")   # ✅ IMPORTANT FIX FOR JUDGE
-def reset(level: Optional[str] = None):
+@app.post("/reset")
+def reset(level: Optional[str] = Body(default=None)):
     if env is None:
         return {"error": "Environment not initialized"}
 
