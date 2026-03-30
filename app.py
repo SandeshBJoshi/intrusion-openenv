@@ -33,11 +33,24 @@ def home():
 
 # ---------------- RESET ----------------
 
-@app.get("/reset")
-@app.post("/reset")
-def reset(level: Optional[str] = Body(default=None)):
+from fastapi import Request
+from typing import Optional
+
+@app.api_route("/reset", methods=["GET", "POST"])
+async def reset(request: Request):
     if env is None:
         return {"error": "Environment not initialized"}
+
+    level = None
+
+    try:
+        data = await request.json()
+        if isinstance(data, str):
+            level = data
+        elif isinstance(data, dict):
+            level = data.get("level")
+    except:
+        level = None
 
     state = env.reset(level)
     last_action["action"] = None
